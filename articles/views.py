@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse,Http404
 from .models import Album
 from django.template import loader
 def index(request):
@@ -11,6 +11,10 @@ def index(request):
 
 
 def detail(request,album_id):
-    return HttpResponse("<h2> Deatils for album id :-"+str(album_id)+"</h2>")
+    try:
+        album=Album.objects.get(pk=album_id)
+    except:
+        raise Http404("Album does not exist")
+    return render(request,'articles/detail.html',{'album':album})
 
 # Create your views here.
